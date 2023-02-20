@@ -1,0 +1,215 @@
+<div class="d-flex flex-column">
+  <form [formGroup]="workoutForm">
+    <!--  -->
+    <div class="row mx-0 d-flex justify-content-between align-items-center">
+      <div class="col-lg-4 col-md-6 col-sm-12 px-0">
+        <div class="d-flex flex-column">
+          <h3 class="mb-2 ">Create Your Workout</h3>
+          <mat-form-field [ngClass]="formFieldHelpers" class="w-100 fs-6" appearance="outline">
+            <input matInput placeholder="Name your workout" name="workout_name" formControlName="name" />
+            <mat-error> Workout name is <strong>required</strong> </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <hr *ngIf="!isGrouped" />
+    </div>
+    <div class="container-fluid px-0">
+      <div formArrayName="exerciseGroup">
+        <div *ngFor="let item of exerciseGroup.controls; let groupId = index">
+          <div [formGroupName]="groupId" [ngClass]="isGrouped ? 'exercise-group' : 'mt-3' ">
+            <div class="d-flex exercise-group-header" *ngIf="isGrouped">
+              <h4 class="fw-500 me-5 mb-0">Exercise Group {{ groupId + 1 }}</h4>
+              <mat-icon class="btn-icon white" (click)="removeExerciseGroup(groupId)">delete</mat-icon>
+            </div>
+            <div class="exercise-group-body">
+              <div class="col-lg-3 col-md-4 col-sm-12">
+                <mat-form-field floatLabel="always" [ngClass]="formFieldHelpers" class="w-100" appearance="outline">
+                  <mat-label>{{ isGrouped ? 'No. of sets per group' : 'No. of sets per exercise' }}</mat-label>
+                  <input matInput type="number" min="1" max="10"
+                    placeholder="{{ isGrouped ? 'No. of sets per group' : 'No. of sets per exercise' }}"
+                    formControlName="noOfSets" />
+                  <mat-error>Please add no of sets.</mat-error>
+                </mat-form-field>
+              </div>
+              <div formArrayName="exercises">
+                <div class="row">
+                  <div *ngFor="let set of getExercises(groupId).controls; let exerciseId=index">
+                    <div [formGroupName]="exerciseId" class="exercise-group__exercise">
+                      <div class="d-flex exercise-group-header">
+                        <h4 class="fw-500 me-5 mb-0">Exercise {{ exerciseId + 1 }}</h4>
+                        <mat-icon class="btn-icon danger "
+                          (click)="removeExercise(groupId, exerciseId)">delete</mat-icon>
+                      </div>
+                      <div class="exercise-group-body row">
+                        <div class="col-md-4 col-sm-12">
+                          <mat-form-field floatLabel="always" [ngClass]="formFieldHelpers" class="w-100"
+                            appearance="outline">
+                            <mat-label>Exercise name</mat-label>
+                            <input matInput placeholder="Exercise name" formControlName="name" />
+                            <mat-error>
+                              Exercise name is <strong>required</strong>
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-4 col-sm-12">
+                          <mat-form-field [ngClass]="formFieldHelpers" class="fs-6 w-100" appearance="outline"
+                            floatLabel="always">
+                            <mat-label>Exercise Type </mat-label>
+                            <mat-select matNativeControl formControlName="type" placeholder="Select Plan"
+                              (selectionChange)="getExerciseTypeSelection($event, groupId, exerciseId)">
+                              <mat-option *ngFor="let type of exerciseTypes" [value]="type.value">
+                                {{ type.label }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+
+                        </div>
+                        <div class="col-md-4 col-sm-2 mb-3">
+                          <div class="d-flex flex-column">
+                            <button mat-raised-button (click)="addNotes(groupId, exerciseId)">
+
+                            {{
+                              exerciseGroup.at(groupId).get('exercises').at(exerciseId)
+                              .controls.notes.value ? 'Edit Notes' : 'Add Notes'
+                            }}
+
+
+                            </button>
+                          </div>
+                        </div>
+                        <div class="d-flex flex-column mb-3"
+                          *ngIf="getExerciseType(groupId, exerciseId) === exerciseTypeEnums.CORE">
+                          <label id="select-core-type">Select set type</label>
+                          <mat-radio-group aria-labelledby="select-core-type" class="d-flex flex-column"
+                            formControlName="coreType">
+                            <mat-radio-button [value]="type.value" *ngFor="let type of coreSetTypes"
+                              (change)="getCoreExerciseType($event, groupId, exerciseId)">{{type.label}}</mat-radio-button>
+                          </mat-radio-group>
+                        </div>
+                        <div formArrayName="sets" class="row mx-0">
+                          <div
+                            *ngFor="let item of getExerciseSetRepsOrTime(groupId,exerciseId).controls; let setId = index"
+                            class="col-12">
+                            <div [formGroupName]="setId">
+                              <div *ngIf="getExerciseType(groupId, exerciseId, setId) === exerciseTypeEnums.CARDIO">
+                                <div class="row">
+                                  <div class="col-md-3 col-sm-12" style="width: calc(max-content + 20px) !important">
+                                    <h4 class="mb-0" style="line-height: 40px;">Enter set {{setId + 1}} exercise
+                                      duration</h4>
+                                  </div>
+                                  <div class="col-md-3 col-sm-6">
+                                    <mat-form-field floatLabel="always" [ngClass]="formFieldHelpers"
+                                      class="w-100 d-flex" appearance="outline">
+                                      <mat-label>Minutes</mat-label>
+                                      <input matInput type="number" placeholder="Minutes" formControlName="minutes" />
+                                      <mat-error>
+                                        Duration <strong>required.</strong>
+                                      </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                  <div class="col-md-3 col-sm-6">
+                                    <mat-form-field floatLabel="always" [ngClass]="formFieldHelpers"
+                                      class="w-100 d-flex" appearance="outline">
+                                      <mat-label>Seconds</mat-label>
+                                      <input matInput type="number" placeholder="Seconds" formControlName="seconds" />
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div *ngIf="getExerciseType(groupId, exerciseId, setId) === exerciseTypeEnums.WEIGHTS">
+                                <div class="row">
+                                  <div class="col-md-3 col-sm-12" style="width: calc(max-content + 20px) !important; ">
+                                    <h4 class="mb-0" style="line-height: 40px;">Enter set {{setId + 1}} Reps</h4>
+                                  </div>
+                                  <div class="col-md-3 col-sm-6">
+                                    <mat-form-field floatLabel="always" [ngClass]="formFieldHelpers"
+                                      class="w-100 d-flex" appearance="outline">
+                                      <mat-label>Reps</mat-label>
+                                      <input matInput type="number" min="1" placeholder="No. of reps"
+                                        formControlName="reps" />
+                                      <mat-error>
+                                        Reps <strong>required.</strong>
+                                      </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div *ngIf="getExerciseType(groupId, exerciseId, setId) === exerciseTypeEnums.CORE">
+                                <div *ngIf="exerciseGroup.at(groupId).get('exercises').at(exerciseId)
+                                .controls.coreType.value === 'time'">
+                                  <div class="row">
+                                    <div class="col-md-3 col-sm-12" style="width: calc(max-content + 20px) !important">
+                                      <h4 class="mb-0" style="line-height: 40px;">Enter set {{setId + 1}} exercise
+                                        duration</h4>
+                                    </div>
+                                    <div class="col-md-3 col-sm-6">
+                                      <mat-form-field floatLabel="always" [ngClass]="formFieldHelpers"
+                                        class="w-100 d-flex" appearance="outline">
+                                        <mat-label>Minutes</mat-label>
+                                        <input matInput type="number" placeholder="Minutes" formControlName="minutes" />
+                                        <mat-error>
+                                          Duration <strong>required.</strong>
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3 col-sm-6">
+                                      <mat-form-field floatLabel="always" [ngClass]="formFieldHelpers"
+                                        class="w-100 d-flex" appearance="outline">
+                                        <mat-label>Seconds</mat-label>
+                                        <input matInput type="number" placeholder="Seconds" formControlName="seconds" />
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div *ngIf="exerciseGroup.at(groupId).get('exercises').at(exerciseId)
+                                .controls.coreType.value === 'reps' ">
+                                  <div class="row">
+                                    <div class="col-md-3 col-sm-12"
+                                      style="width: calc(max-content + 20px) !important; ">
+                                      <h4 class="mb-0" style="line-height: 40px;">Enter set {{setId + 1}} Reps</h4>
+                                    </div>
+                                    <div class="col-md-3 col-sm-6">
+                                      <mat-form-field floatLabel="always" [ngClass]="formFieldHelpers"
+                                        class="w-100 d-flex" appearance="outline">
+                                        <mat-label>Reps</mat-label>
+                                        <input matInput type="number" placeholder="No. of reps"
+                                          formControlName="reps" />
+                                        <mat-error>
+                                          Reps <strong>required.</strong>
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button mat-raised-button [ngClass]=" !isGrouped ? 'mb-5' : '' " (click)="addNewExercise(groupId)">
+                {{ isGrouped ? 'Add new exercise to group' : 'Add new exercise' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="col-12 d-flex justify-content-between align-items-center">
+    <button mat-raised-button color="warn" (click)="addNewGroup()">
+      {{ workoutForm.get('exerciseGroup')?.value.length > 0 ? 'Add new group' : 'Add new exercise' }}
+    </button>
+
+    <button mat-raised-button color="warn" (click)="save()" [disabled]="!(workoutForm.valid && hasExercise)">
+      {{ workoutId ? 'Update Workout' : 'Save Workout'}}
+    </button>
+  </div>
+
+</div>

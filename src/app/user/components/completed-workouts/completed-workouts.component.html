@@ -1,0 +1,20 @@
+<div class="d-flex flex-column" *ngIf="workoutPlans?.length; else noRecord">
+  <div class="workout-plan-cards" *ngFor="let workout of workoutPlans">
+    <div class="d-flex flex-column">
+      <h4 class="mb-0 me-3 fw-semibold text-danger">{{workout?.name}}</h4>
+      <span>Exercise Groups: <b>{{workout.exerciseGroupLength}}</b></span>
+      <span *ngIf="workout.updatedAt">Completed on: <b>{{workout.updatedAt | date: 'dd/MM/yyyy hh:mm a'}}</b></span>
+
+      <a class="d-flex cursor-pointer text-danger" (click)="viewWorkoutDetails(workout._id)">View more details</a>
+    </div>
+    <div class="action-buttons">
+      <button mat-raised-button color="warn" (click)="deleteWorkoutPlan(workout._id)" class="desktop">Delete</button>
+      <mat-icon class="btn-icon danger mobile" (click)="deleteWorkoutPlan(workout._id)">delete</mat-icon>
+    </div>
+  </div>
+</div>
+<ng-template #noRecord>
+  <div class="no-workouts">
+    <h1>Looks like you haven't completed any Workout</h1>
+  </div>
+</ng-template>

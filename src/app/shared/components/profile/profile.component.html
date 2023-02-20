@@ -1,0 +1,60 @@
+<section>
+  <div class="container pb-5">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <div class="profile-pic-wrapper">
+              <div class="pic-holder">
+                <img id="profile_pic" class="pic" [src]="userInfo.imageUrl ? userInfo.imageUrl : 'assets/images/lifting_ledger.png' " />
+              </div>
+            </div>
+            <p class="d-flex justify-content-center align-items-center mt-2">
+              <input #csvInput hidden="true" type="file" onclick="this.value=null" (change)="fileUploadChange($event)"
+                accept="image/*" />
+              <mat-icon (click)="csvInput.click()">edit</mat-icon>
+              <mat-icon (click)="removeProfilePicture()" class="mx-2">delete</mat-icon>
+            </p>
+            <p class="text-muted my-3">{{userInfo.name | uppercase}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Full Name</p>
+              </div>
+              <div class="col-sm-9 d-flex justify-content-between">
+                <p class="text-muted mb-0" (blur)="blur(name, 'name')" #name>{{userInfo.name}}</p>
+                <mat-icon style="font-size: 20px;" class="me-2" (click)="edit(name)">edit</mat-icon>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Email <span class="text-muted" style="font-size: 12px;">(Can't edit email)</span></p>
+              </div>
+              <div class="col-sm-9 d-flex justify-content-between">
+                <p class="text-muted mb-0">{{userInfo.email}}</p>
+              </div>
+            </div>
+            <hr *ngIf="userInfo.mobile">
+
+            <div class="row" *ngIf="userInfo.mobile">
+              <div class="col-sm-3">
+                <p class="mb-0">Mobile</p>
+              </div>
+              <div class="col-sm-9 d-flex justify-content-between">
+                <p class="text-muted mb-0" #mobile (blur)="blur(mobile, 'mobile')">{{userInfo.mobile}}</p>
+                <mat-icon style="font-size: 20px;" class="me-2" (click)="edit(mobile)">edit</mat-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button mat-raised-button (click)="save()" class="warn">Update</button>
+      </div>
+    </div>
+  </div>
+</section>

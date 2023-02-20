@@ -1,0 +1,38 @@
+.exercise-group {
+  margin-bottom: 20px;
+  border: 1px solid #e0e7eb;
+  border-radius: 0px 0px 4px 4px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.exercise-group .exercise-group-header,
+.exercise-group__exercise .exercise-group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  border-radius: 4px 4px 0px 0px;
+}
+.exercise-group .exercise-group-header {
+  background-color: #f44a3e;
+  color: #fff;
+}
+
+.exercise-group__exercise .exercise-group-header {
+  background-color: #fff;
+  color: #000;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+.exercise-group .exercise-group-body,
+.exercise-group__exercise .exercise-group-body {
+  padding-inline: 10px;
+  padding-bottom: 10px;
+}
+
+.exercise-group__exercise {
+  margin-bottom: 20px;
+  border: 1px solid #e0e7eb;
+  border-radius: 0px 0px 4px 4px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}

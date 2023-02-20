@@ -1,0 +1,39 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
+    <mat-toolbar class="sidebar-mat-toolbar">
+      <div class="lifting-ledger-logo"></div>
+    </mat-toolbar>
+
+    <div class="section-separator"></div>
+
+    <mat-nav-list>
+      <div class="profile-pic-wrapper">
+        <div class="pic-holder">
+          <img
+            id="profile_pic"
+            class="pic"
+            [src]="userImage ? userImage : 'assets/images/lifting_ledger.png' "
+          />
+        </div>
+      </div>
+        <div class="profile-name text-center text-light mb-3">{{userName}}</div>
+      <div *ngFor="let item of navItems" class="lifting-ledger-nav-items">
+        <a *ngIf="!item.hide" mat-list-item [routerLink]="item?.path" (click)="setTitle(item.title)">{{ item?.title
+          }}</a>
+      </div>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="sidenav-toolbar">
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span class="brand-name"><app-title></app-title> </span>
+    </mat-toolbar>
+    <div class="dashboard-tab">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

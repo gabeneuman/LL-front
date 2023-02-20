@@ -1,0 +1,42 @@
+<div class="container-fluid register vh-100">
+    <div class="register-form ">
+      <form class="row" [formGroup]="user">
+        <div class="col-sm-12 d-flex flex-column align-items-center">
+          <img src="assets/images/lifting_ledger.png" alt="" width="100%">
+          <h2 class="mt-2">Login</h2>
+        </div>
+        <div class="col-sm-12 mt-3">
+          <mat-label>Email</mat-label>
+          <mat-form-field class="w-100 fs-6" appearance="outline">
+            <input matInput placeholder="Enter email" formControlName="username" />
+            <mat-error> Email is required* </mat-error>
+          </mat-form-field>
+        </div>
+       
+        <div class="col-sm-12">
+          <mat-label>Password</mat-label>
+          <mat-form-field class="w-100 fs-6" appearance="outline">
+            <input matInput type="password" placeholder="Enter password" formControlName="password" #passwordField />
+            <button mat-icon-button type="button"
+                            (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
+                            matSuffix>
+                            <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'password'"
+                                >visibility</mat-icon>
+                            <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'text'"
+                                >visibility_off</mat-icon>
+                        </button>
+            <mat-error *ngIf="user.controls['password'].hasError('required')"> Password is required*
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-12 mb-4">
+          <a [routerLink]="['/register']" routerLinkActive="router-link-active"  href="#">Not registered? Sign Up</a>
+        </div>
+  
+      </form>
+      <div class="col-sm-12">
+        <button mat-raised-button routerLinkActive="router-link-active"  class="w-100" color="warn" (click)="login()"
+          [disabled]="user.invalid">Login</button>
+      </div>
+    </div>
+  </div>

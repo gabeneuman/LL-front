@@ -1,0 +1,128 @@
+<div *ngFor="let group of this.workoutPlan?.exerciseGroup; let groupIndex = index">
+  <div *ngFor="let exercise of group.exercises; let exerciseIndex = index">
+    <div *ngFor="let set of exercise.sets; let setIndex = index">
+      <div *ngIf="
+          currentGroupIndex === groupIndex &&
+          currentExerciseIndex === exerciseIndex &&
+          currentSetIndex === setIndex
+        " class="d-flex flex-column justify-content-between workout-sections">
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <div class="workout-name">
+              <div class="d-flex align-items-center">
+                <h2>Workout status:</h2>
+                <h3 class="flex-grow-1 text-right" [ngClass]="
+                    workoutPlan?.completed ? 'text-success' : 'text-warning'
+                  ">
+                  &nbsp; <b> {{ workoutPlan?.completed ? "Completed" : "In Progress" }} </b>
+                </h3>
+              </div>
+              <div class="d-flex align-items-center">
+                <h2>Exercise name:</h2>
+                <h3 class="flex-grow-1 text-right">
+                  &nbsp; {{ exercise?.name | titlecase }}
+                </h3>
+              </div>
+              <div class="d-flex align-items-center">
+                <h2>Current Set:</h2>
+                <h3 class="flex-grow-1 text-right">
+                  &nbsp; {{ currentSetIndex + 1 }} of {{ group.noOfSets }}
+                </h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="workout-name">
+              <div class="d-flex align-items-center" *ngIf="this.workoutPlan.exerciseGroup.length > 1">
+                <h2>Exercise group:</h2>
+                <h3 class="flex-grow-1 text-right">
+                  &nbsp; {{ currentGroupIndex + 1 }}
+                </h3>
+              </div>
+              <div class="d-flex align-items-center">
+                <h2>Exercise type:</h2>
+                <h3 class="flex-grow-1 text-right">
+                  &nbsp; {{ exercise?.type | titlecase }}
+                </h3>
+              </div>
+            </div>
+          </div>
+          <hr class="mt-2">
+        </div>
+        <div class="row flex-grow-1 ">
+          <div *ngIf="exercise?.sets[setIndex].reps" >
+            <h2>Do {{exercise?.name | titlecase }} for {{ exercise?.sets[setIndex].reps }} <span>Reps</span></h2>
+            <div class="col-lg-3 col-md-4 col-sm-8">
+            <mat-label class="mb-1">Enter weight</mat-label>
+            <mat-form-field floatLabel="always" class="w-100" appearance="outline">
+              <input required matInput type="number" #weight="ngModel" min="1" placeholder="Enter Weight in Lb"
+                [(ngModel)]="exercise?.sets[setIndex].weight" />
+              <mat-error *ngIf="weight.invalid && (weight.dirty || weight.touched)"> Weight is required*
+              </mat-error>
+            </mat-form-field>
+          </div>
+          </div>
+
+          <div *ngIf="exercise?.sets[setIndex].minutes">
+            <h2>Do {{ exercise?.name | titlecase }} for
+              {{ exercise?.sets[setIndex].minutes }}
+              <span *ngIf="exercise?.sets[setIndex].minutes"> minutes</span>
+              <span *ngIf="exercise?.sets[setIndex].seconds"> and</span>
+              {{ exercise?.sets[setIndex].seconds }}
+              <span *ngIf="exercise?.sets[setIndex].seconds"> seconds</span>
+            </h2>
+
+            <div class="row">
+              <div class="d-flex justify-content-start">
+                <button *ngIf="!timer" color="accent" mat-raised-button 
+                (click)="startCountdown(exercise?.sets[setIndex].minutes, exercise?.sets[setIndex].seconds)">Start timer</button>
+                <button *ngIf="timer" color="accent" mat-raised-button (click)="stopCountdown(exercise?.sets[setIndex].minutes, exercise?.sets[setIndex].seconds)">Pause timer</button>
+              </div>
+            </div>
+
+            <div class="row" *ngIf="showCountdown">
+              <h1 class="text-center my-4">{{ minutes | number: '2.0-0' }}:{{ seconds | number: '2.0-0' }}</h1>
+            </div>
+          </div>
+
+          <div *ngIf="exercise?.notes">
+            <h2 class="mb-2">Notes</h2>
+            <p class="notes-details">{{ exercise?.notes }}</p>
+          </div>
+
+
+        </div>
+        <div class="row">
+          <div class="d-flex justify-content-center flex-wrap align-items-center">
+            <button mat-raised-button class="mt-2 mx-2" (click)="previousExercise(groupIndex, exerciseIndex, setIndex)">
+              Previous Exercise
+            </button>
+            <button mat-raised-button [disabled]="(exercise?.sets[setIndex].reps &&
+           !exercise?.sets[setIndex].weight)" class="mt-2 mx-2"
+              (click)="nextExercise(groupIndex, exerciseIndex, setIndex)">
+              Next Exercise
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- <div class="mt-3 d-flex justify-content-center flex-wrap align-items-center">
+  <button mat-raised-button color="accent" class="mt-2 mx-2"
+    (click)="previousExercise(groupIndex, exerciseIndex, setIndex)">
+    Previous Exercise
+  </button>
+  <button mat-raised-button color="warn" class="mt-2 mx-2" (click)="nextExercise(groupIndex, exerciseIndex, setIndex)">
+    Next Exercise
+  </button>
+</div> -->
+
+<!-- <div *ngIf="exercise?.sets[setIndex].reps" class="text-center col-md-6 col-sm-12">
+  <mat-form-field floatLabel="always" class="w-100" appearance="outline">
+    <mat-label>Enter weight</mat-label>
+    <input matInput type="number" min="1" placeholder="Enter Weight" [(ngModel)]="exercise?.sets[setIndex].weight" />
+  </mat-form-field>
+</div> -->

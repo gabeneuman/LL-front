@@ -1,0 +1,25 @@
+<div class="d-flex justify-content-end mb-3">
+  <button mat-raised-button class="new-workout-btn" [routerLink]="'/add-workout'">Add new workout</button>
+</div>
+
+<div class="d-flex flex-column" *ngIf="workoutPlans?.length; else noRecord">
+  <div class="workout-plan-cards" *ngFor="let workout of workoutPlans">
+    <div class="d-flex flex-column">
+      <h4 class="mb-0 me-3 fw-semibold text-danger">{{workout?.name}}</h4>
+      <span>Exercise Groups: <b>{{workout.exerciseGroupLength}}</b></span>
+      <span *ngIf="workout.createdAt">Created on: <b>{{workout.createdAt | date: 'dd/MM/yyyy'}}</b></span>
+    <a class="d-flex cursor-pointer text-danger" (click)="viewWorkoutDetails(workout?._id)">View more details</a>
+    </div>
+    <div class="action-buttons">
+      <button mat-raised-button color="warn" (click)="deleteWorkoutPlan(workout._id)" class="desktop">Delete workout</button>
+      <mat-icon class="btn-icon danger mobile" (click)="deleteWorkoutPlan(workout._id)">delete</mat-icon>
+    </div>
+  </div>
+</div>
+
+<ng-template #noRecord>
+ <div class="no-workouts">
+  <h1>No Workout Found</h1>
+  <h2>Add new Workout</h2>
+ </div>
+</ng-template>

@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-lg-end flex-wrap justify-content-sm-between mb-3" *ngIf="!workoutPlan?.completed">
+  <button mat-raised-button class="start-workout-btn me-2 text-danger" (click)="startWorkout()">Start workout
+    <mat-icon>fitness_center</mat-icon></button>
+  <button mat-raised-button class="edit-workout-btn" (click)="editWorkout()">Edit workout
+    <mat-icon>edit</mat-icon></button>
+</div>
+
+<div class="d-flex flex-column">
+  <div *ngIf="workoutPlan">
+    <h2 class="mb-2 text-danger">Workout name: {{workoutPlan.name | uppercase}}</h2>
+    <h2 class="mb-2 text-danger">Workout status: <span class="flex-grow-1 text-right" [ngClass]="
+      workoutPlan.completed ? 'text-success' : 'text-warning'
+    ">
+        &nbsp; <b> {{ workoutPlan.completed ? "Completed" : "In Progress" }} <span
+            *ngIf="workoutPlan.updatedAt && workoutPlan.completed" class="fs-6"> &nbsp;  &nbsp; ({{workoutPlan.updatedAt | date: 'dd/MM/yyyy hh:mm
+            a'}})</span> <br>
+        </b>
+      </span> </h2>
+    <span *ngIf="workoutPlan.notes"><b>Notes:</b> {{workoutPlan.notes}}</span>
+
+    <div *ngFor="let group of workoutPlan.exerciseGroup; let groupId=index" class="my-4">
+
+      <h3 class="mb-2 text-danger"><b>Exercise<span *ngIf="workoutPlan.exerciseGroup.length > 1"> group {{groupId +
+            1}}</span></b></h3>
+
+      <div *ngFor="let exercise of group.exercises; let exerciseId=index" class="ms-3">
+        <h3 class="mb-2 text-dark"><b>Exercise Name</b> &nbsp; <span>
+            {{exercise.name | uppercase}}
+          </span>
+          <h3><b>Exercise Type</b> {{exercise.type}}</h3>
+          <ul class="ms-3 mt-2">
+            <li *ngFor="let details of exercise.sets; let setId=index">
+              <span *ngIf="details?.reps"> <b>Set {{setId + 1}}:</b>
+
+                {{details.reps}} reps <span *ngIf="details.weight">
+                  &nbsp;&nbsp; ->
+                  &nbsp;&nbsp; <b>Weight:</b> {{details.weight}} lb
+
+                </span>
+              </span>
+              <span *ngIf="details?.minutes"> <b>Set {{setId + 1 }} Time:</b>
+                {{details.minutes}} minutes <span *ngIf="details?.seconds">{{details.seconds}} seconds</span>
+              </span>
+            </li>
+          </ul>
+        </h3>
+      </div>
+    </div>
+  </div>
+</div>

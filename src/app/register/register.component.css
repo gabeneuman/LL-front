@@ -1,0 +1,21 @@
+.register {
+    background: #151219;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register .register-form {
+    width: 400px;
+    max-width: 450px;
+    background-color: #fff;
+    padding: 32px 48px;
+    border-radius: 8px;
+}
+
+.mat-error-field {
+    font-size: 11px;
+    color: #f44336 !important;
+    position: relative;
+    right: 14px;
+}
