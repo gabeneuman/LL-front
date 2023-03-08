@@ -27,6 +27,12 @@ export class DataService {
     );
   }
 
+  getAllWorkOuts(payload): Observable<WorkoutI[]> {
+    return this.http.post<WorkoutI[]>(
+      `${environments.baseURL}${environments.workoutAPI}/explore`, payload
+    );
+  }
+
   getCompletedWorkOuts(): Observable<WorkoutI[]> {
     return this.http.get<WorkoutI[]>(
       `${environments.baseURL}${environments.workoutAPI}/completed`

@@ -11,6 +11,8 @@ import { WorkoutDetailsComponent } from './components/workout-details/workout-de
 import { WorkoutComponent } from './components/workout/workout.component';
 import { CompletedWorkoutsComponent } from './components/completed-workouts/completed-workouts.component';
 import { ProfileComponent } from '../shared/components/profile/profile.component';
+import { ExploreComponent } from './components/explore/explore.component';
+import { ViewExploredWorkoutComponent } from './components/view-explored-workout/view-explored-workout.component';
 
 @NgModule({
     declarations: [
@@ -20,7 +22,9 @@ import { ProfileComponent } from '../shared/components/profile/profile.component
         WorkoutDetailsComponent,
         WorkoutComponent,
         CompletedWorkoutsComponent,
-        ProfileComponent
+        ProfileComponent,
+        ExploreComponent,
+        ViewExploredWorkoutComponent
     ],
     exports: [
         TitleComponent

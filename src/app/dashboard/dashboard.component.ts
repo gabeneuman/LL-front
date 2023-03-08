@@ -73,6 +73,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.dataService.getUser().subscribe((user) => {
       this.userName = user?.name;
       this.userImage = user?.imageUrl;
+      localStorage.setItem('user', user?._id);
     });
   }
 

@@ -7,7 +7,7 @@ export interface WorkoutI {
   notes?: string;
   completed?: boolean;
   isDeleted?: boolean;
-  createdBy?: string;
+  createdBy?: string | any;
   modifiedBy?: string;
   createdAt?: string;
   updatedAt?: string;

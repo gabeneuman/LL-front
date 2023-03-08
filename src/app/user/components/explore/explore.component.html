@@ -1,0 +1,23 @@
+  <div class="d-flex flex-column" *ngIf="workoutPlans?.length;">
+    <div class="workout-plan-cards" *ngFor="let workout of workoutPlans">
+      <div class="d-flex flex-column">
+        <h4 class="mb-0 me-3 fw-semibold text-danger">{{workout?.name}}</h4>
+        <span>Exercise Groups: <b>{{workout.exerciseGroupLength}}</b></span>
+        <span *ngIf="workout.createdAt">Created on: <b>{{workout.createdAt | date: 'dd/MM/yyyy'}}</b></span>
+        <span *ngIf="workout.createdBy">Created by: <b>{{workout.createdBy?.name | titlecase}}</b></span>
+      <a class="d-flex cursor-pointer text-danger" (click)="viewWorkoutDetails(workout?._id)">View more details</a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="d-flex justify-content-center flex-wrap align-items-center">
+        <button mat-raised-button class="mt-2 mx-2" (click)="prev()" [disabled]="page===1">
+          Previous workouts
+        </button>
+        <button mat-raised-button  class="mt-2 mx-2"
+          (click)="next()" [disabled]="workoutPlans?.length < 5">
+          More workouts
+        </button>
+      </div>
+    </div>
+  </div>
+  

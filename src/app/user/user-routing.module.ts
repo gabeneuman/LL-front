@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { ProfileComponent } from '../shared/components/profile/profile.component';
 import { AddWorkoutsComponent } from './components/add-workouts/add-workouts.component';
 import { CompletedWorkoutsComponent } from './components/completed-workouts/completed-workouts.component';
+import { ExploreComponent } from './components/explore/explore.component';
+import { ViewExploredWorkoutComponent } from './components/view-explored-workout/view-explored-workout.component';
 import { WorkoutDetailsComponent } from './components/workout-details/workout-details.component';
 import { WorkoutListComponent } from './components/workout-list/workout-list.component';
 import { WorkoutComponent } from './components/workout/workout.component';
@@ -26,6 +28,10 @@ const routes: Routes = [
     component: AddWorkoutsComponent,
   },
   {
+    path: 'view/:isReadOnly',
+    component: AddWorkoutsComponent,
+  },
+  {
     path: 'workout-details/:workoutId',
     component: WorkoutDetailsComponent,
   },
@@ -41,6 +47,14 @@ const routes: Routes = [
     path: 'profile',
     component: ProfileComponent,
   },
+  {
+    path: 'explore',
+    component: ExploreComponent
+  },
+  {
+    path: 'explore/:workoutId',
+    component: ViewExploredWorkoutComponent
+  }
 ];
 
 @NgModule({

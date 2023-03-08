@@ -36,3 +36,7 @@
   border-radius: 0px 0px 4px 4px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+.readonly {
+  user-select: none;
+  pointer-events: none;
+}

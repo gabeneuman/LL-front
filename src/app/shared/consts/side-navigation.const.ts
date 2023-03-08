@@ -20,6 +20,12 @@ export const NAVIGATION_MENU: SideNavI[] = [
         hide: false,
     },
     {
+        path: '/explore',
+        title: 'Explore Workouts',
+        icon: '',
+        hide: false,
+    },
+    {
         path: '/profile',
         title: 'Profile',
         icon: '',
