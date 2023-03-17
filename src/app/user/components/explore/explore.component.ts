@@ -26,8 +26,14 @@ export class ExploreComponent {
   private getWorkoutPlans(): void {
     this.dataService
       .getAllWorkOuts({ page: this.page })
-      .subscribe((workoutPlans: any) => {
-        this.workoutPlans = workoutPlans.response;
+      .subscribe((res: any) => {
+        res.response.forEach((element) => {
+          element.totalExercises = element.exerciseGroup.reduce(
+            (acc: any, curr: any) => acc + curr.exercises.length,
+            0
+          );
+        });
+        this.workoutPlans = res.response;
       });
   }
 

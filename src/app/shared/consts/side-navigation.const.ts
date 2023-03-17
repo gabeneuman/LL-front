@@ -21,7 +21,7 @@ export const NAVIGATION_MENU: SideNavI[] = [
     },
     {
         path: '/explore',
-        title: 'Explore Workouts',
+        title: 'Explore',
         icon: '',
         hide: false,
     },

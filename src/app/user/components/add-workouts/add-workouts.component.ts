@@ -37,7 +37,6 @@ export class AddWorkoutsComponent implements OnInit {
   formFieldHelpers: string[] = [''];
   workoutId!: string | null;
   notes: string = '';
-  isReadOnly = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -100,11 +99,6 @@ export class AddWorkoutsComponent implements OnInit {
   ngOnInit(): void {
     this.initializeWorkoutForm();
     this.workoutId = this.route.snapshot.paramMap.get('workoutId');
-    const isReadOnly = this.route.snapshot.paramMap.get('isReadOnly');
-    if (isReadOnly) {
-      this.isReadOnly = true;
-      this.getWorkoutDetails(isReadOnly);
-    }
     if (this.workoutId) {
       this.getWorkoutDetails(this.workoutId);
     }
@@ -112,7 +106,7 @@ export class AddWorkoutsComponent implements OnInit {
 
   onEdit(workout: WorkoutI): void {
     console.log('workout: ', workout);
-    this.titleService.setTitle(this.isReadOnly ? `Readonly (${workout.name})` : `Edit workout (${workout.name})`);
+    this.titleService.setTitle(`Edit workout (${workout.name})`);
     this.workoutForm.patchValue({ name: workout.name });
     this.workoutForm.patchValue({ notes: workout.notes });
     // populating the exercise groups

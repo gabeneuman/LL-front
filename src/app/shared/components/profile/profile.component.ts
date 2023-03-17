@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { UserI } from '../../interfaces';
+import { UserI, WorkoutI } from '../../interfaces';
 import { User } from '../../models';
 import { DataService } from '../../services/data.service';
 import {
   FileUpload,
   ImageUploadService,
 } from '../../services/file-upload-service';
+import { ChartOptions, ChartConfiguration } from 'chart.js';
 
 @Component({
   selector: 'app-profile',
@@ -15,17 +17,46 @@ import {
 })
 export class ProfileComponent {
   public userInfo: UserI = new User();
+  public isEdit = false;
+  public workouts: WorkoutI[];
+  public stats: any = {};
+  public isView = false;
+  public pieChartOptions: ChartOptions<'pie'> = {
+    responsive: false,
+  };
+  public pieChartLabels = [['Completed'], ['In progress']];
+  public pieChartDatasets = [];
+  public pieChartLegend = true;
+  public pieChartPlugins = [];
 
   constructor(
     private dataService: DataService,
     private imageUploadService: ImageUploadService,
-    private toastr: ToastrService
-  ) {}
+    private toastr: ToastrService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
-    this.dataService.getUser().subscribe((data: any) => {
-      this.userInfo = data;
-    });
+    const id = this.route.snapshot.paramMap.get('userId');
+    if (id) {
+      this.isView = true;
+      this.dataService.getUserById(id).subscribe((data: any) => {
+        this.userInfo = data.user[0];
+        this.workouts = data.workout[0];
+        this.stats = data.stat;
+      });
+    } else {
+      this.dataService.getUser().subscribe((data: any) => {
+        console.log('data: ', data);
+        this.userInfo = data.user[0];
+        this.workouts = data.workout[0];
+        this.stats = data.stat;
+        this.pieChartDatasets = [{
+          data: [this.stats.completed, this.stats.todo]
+        }];
+      });
+    }
   }
 
   public fileUploadChange(event: any): void {
@@ -63,20 +94,12 @@ export class ProfileComponent {
     );
   }
 
-  public edit(HtmlTemplate): void {
-    HtmlTemplate.classList.add('on-edit');
-    HtmlTemplate.focus();
-    HtmlTemplate.contentEditable = 'true';
-  }
-
-  public blur(HtmlTemplate, type): void {
-    this.userInfo[type] = HtmlTemplate.innerText;
-    HtmlTemplate.classList.remove('on-edit');
-    HtmlTemplate.contentEditable = 'false';
-    HtmlTemplate.blur();
+  public edit(): void {
+    this.isEdit = true;
   }
 
   public save(): void {
+    this.isEdit = false;
     this.dataService.updateUser(this.userInfo).subscribe(
       (data) => {
         this.toastr.success('Profile updated');
@@ -85,5 +108,17 @@ export class ProfileComponent {
         this.toastr.error('Error updating profile');
       }
     );
+  }
+
+  public viewWorkoutDetails(workoutId: string | undefined): void {
+    this.router.navigate(['/explore/', workoutId]);
+  }
+
+  public onOpen() {
+    this.isEdit = true;
+  }
+
+  public onClose() {
+    this.isEdit = false;
   }
 }

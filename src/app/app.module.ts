@@ -44,7 +44,7 @@ import { environments } from './environments/environment';
     HttpClientModule,
     CoreModule,
     UserModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
   ],
 })
 export class AppModule {}

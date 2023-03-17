@@ -48,6 +48,10 @@ const routes: Routes = [
     component: ProfileComponent,
   },
   {
+    path: 'profile/:userId',
+    component: ProfileComponent,
+  },
+  {
     path: 'explore',
     component: ExploreComponent
   },

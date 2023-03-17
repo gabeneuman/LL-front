@@ -1,6 +1,6 @@
 <div class="d-flex flex-column" >
   <form [formGroup]="workoutForm">
-    <fieldset [class.readonly]="isReadOnly">
+    <fieldset>
         <!--  -->
     <div class="row mx-0 d-flex justify-content-between align-items-center">
       <div class="col-lg-4 col-md-6 col-sm-12 px-0">
@@ -205,11 +205,11 @@
   </form>
 
   <div class="col-12 d-flex justify-content-between align-items-center">
-    <button mat-raised-button color="warn" (click)="addNewGroup()" [disabled]="isReadOnly">
+    <button mat-raised-button color="warn" (click)="addNewGroup()" >
       {{ workoutForm.get('exerciseGroup')?.value.length > 0 ? 'Add new group' : 'Add new exercise' }}
     </button>
 
-    <button mat-raised-button color="warn" (click)="save()" [disabled]="!(workoutForm.valid && hasExercise) || isReadOnly">
+    <button mat-raised-button color="warn" (click)="save()" [disabled]="!(workoutForm.valid && hasExercise)">
       {{ workoutId ? 'Update Workout' : 'Save Workout'}}
     </button>
   </div>

@@ -13,6 +13,7 @@ import { CompletedWorkoutsComponent } from './components/completed-workouts/comp
 import { ProfileComponent } from '../shared/components/profile/profile.component';
 import { ExploreComponent } from './components/explore/explore.component';
 import { ViewExploredWorkoutComponent } from './components/view-explored-workout/view-explored-workout.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
     declarations: [
@@ -36,6 +37,7 @@ import { ViewExploredWorkoutComponent } from './components/view-explored-workout
         MaterialModule,
         FormsModule,
         ReactiveFormsModule,
+        NgChartsModule
     ]
 })
 export class UserModule { }

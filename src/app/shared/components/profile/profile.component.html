@@ -1,4 +1,4 @@
-<section>
+<!-- <section>
   <div class="container pb-5">
     <div class="row">
       <div class="col-lg-4">
@@ -10,8 +10,7 @@
               </div>
             </div>
             <p class="d-flex justify-content-center align-items-center mt-2">
-              <input #csvInput hidden="true" type="file" onclick="this.value=null" (change)="fileUploadChange($event)"
-                accept="image/*" />
+              
               <mat-icon (click)="csvInput.click()">edit</mat-icon>
               <mat-icon (click)="removeProfilePicture()" class="mx-2">delete</mat-icon>
             </p>
@@ -57,4 +56,125 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->
+
+<div class="d-flex flex-column">
+  <div class="row" *ngIf="userInfo">
+    <input #csvInput hidden="true" type="file" onclick="this.value=null" (change)="fileUploadChange($event)"
+      accept="image/*" />
+    <div class="col-12">
+      <div class="sample-header">
+        <div class="image-section" *ngIf="!isView" (click)="csvInput.click()"
+          [ngStyle]="{'background-image': userInfo.imageUrl ? 'url(' + userInfo.imageUrl + ')' : ''}">
+          <div class="remove-circle"><mat-icon
+              (click)="removeProfilePicture(); $event.stopPropagation()">close</mat-icon></div>
+        </div>
+        <div class="image-section-s" *ngIf="isView"
+          [ngStyle]="{'background-image': userInfo.imageUrl ? 'url(' + userInfo.imageUrl + ')' : ''}">
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h2 class="mb-0 mt-4 card-title">{{ userInfo.name }}</h2>
+          <h4 class="mb-1 card-subtitle text-muted">{{ userInfo.email }}</h4>
+          <h4 *ngIf="userInfo.mobile" class="mb-1 card-subtitle text-muted">{{ userInfo.mobile }}</h4>
+          <button class="mt-2" mat-raised-button color="warn" *ngIf="!isEdit && !isView" (click)="edit()">Edit
+            <mat-icon>edit</mat-icon></button>
+
+        </div>
+      </div>
+
+      <div class="card mt-3" *ngIf="!isView">
+        <mat-accordion>
+          <mat-expansion-panel [expanded]="isEdit" (afterCollapse)="onClose()" (afterExpand)="onOpen()">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Personal data
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="row">
+              <form #f="ngForm">
+                <div class="row">
+                  <div class="col-12">
+                    <mat-label>Name</mat-label>
+                    <mat-form-field class="w-100 fs-6" appearance="outline">
+                      <input matInput name="name" placeholder="Enter your name" [(ngModel)]="userInfo.name" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-label>Email (can't edit)</mat-label>
+                    <mat-form-field class="w-100 fs-6" appearance="outline">
+                      <input name="email" matInput readonly [(ngModel)]="userInfo.email" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-label>Phone</mat-label>
+                    <mat-form-field class="w-100 fs-6" appearance="outline">
+                      <input matInput name="mobile" placeholder="Enter your phone" [(ngModel)]="userInfo.mobile" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-12">
+                    <button mat-raised-button color="warn" (click)="save()">Update</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+          </mat-expansion-panel>
+
+        </mat-accordion>
+      </div>
+      <h2 class="card-title mb-0 mt-3"> {{ isView ? userInfo.name +"'s" : 'Your' }} progress</h2>
+      <div class="card">
+        <mat-tab-group>
+          <mat-tab label="Stats">
+            <div class="m-3">
+              <h3 class="mb-0 card-title d-flex align-items-center">Completed workouts: <h3
+                  class="text-muted card-title mb-0 mx-4">{{stats.completed}}</h3>
+              </h3>
+              <h3 class="mb-0 card-title d-flex align-items-center">Pending workouts: <h3
+                  class="text-muted card-title mb-0 mx-4">{{stats.todo}}</h3>
+              </h3>
+            </div>
+            <div class="m-3">
+
+
+              <h2>Last 30 days</h2>
+              <h3 class="mb-0">
+                Statistical Data
+              </h3>
+              <div class="row">
+                <div class="col-md-6"> <canvas baseChart [type]="'pie'" [datasets]="pieChartDatasets"
+                    [labels]="pieChartLabels" [options]="pieChartOptions" [plugins]="pieChartPlugins"
+                    [legend]="pieChartLegend">
+                  </canvas></div>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="Workouts">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-md-4" *ngFor="let workout of workouts">
+                  <div class="card custom-card my-3"
+                    [ngStyle]="{'border-left-color': workout.completed ? 'green' : ''}">
+                    <div class="card-body">
+                      <h2 class="card-title mb-0">{{ workout.name }}</h2>
+                      <div class="row mb-2">
+                        <span>Exercise Groups:
+                          <b>{{ workout.exerciseGroup.length }}</b></span>
+                        <span>Total Exercises: <b>{{ workout.totalExercises }}</b></span>
+                      </div>
+                      <a class="card-link" (click)="viewWorkoutDetails(workout?._id)">View Details</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+
+    </div>
+  </div>
+</div>

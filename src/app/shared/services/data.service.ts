@@ -73,4 +73,10 @@ export class DataService {
     );
   }
 
+  getUserById(id: string): Observable<any> {
+    return this.http.get<any>(
+      `${environments.baseURL}${environments.userAPI}/${id}`
+    );
+  }
+
 }

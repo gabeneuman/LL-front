@@ -25,6 +25,12 @@ export class WorkoutListComponent implements OnInit {
 
   private getWorkoutPlans(): void {
     this.dataService.getWorkOuts().subscribe((workoutPlans) => {
+      workoutPlans.forEach((element) => {
+        element.totalExercises = element.exerciseGroup.reduce(
+          (acc: any, curr: any) => acc + curr.exercises.length,
+          0
+        );
+      });
       this.workoutPlans = workoutPlans?.filter((status) => !status.completed);
     });
   }

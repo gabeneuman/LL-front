@@ -11,6 +11,7 @@ export interface WorkoutI {
   modifiedBy?: string;
   createdAt?: string;
   updatedAt?: string;
+  totalExercises?: number;
 }
 
 export interface ExerciseGroupI {

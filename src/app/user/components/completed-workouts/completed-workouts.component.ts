@@ -26,6 +26,12 @@ export class CompletedWorkoutsComponent {
 
   private getWorkoutPlans(): void {
     this.dataService.getCompletedWorkOuts().subscribe((workoutPlans) => {
+      workoutPlans.forEach((element) => {
+        element.totalExercises = element.exerciseGroup.reduce(
+          (acc: any, curr: any) => acc + curr.exercises.length,
+          0
+        );
+      });
       this.workoutPlans = workoutPlans;
     });
   }
