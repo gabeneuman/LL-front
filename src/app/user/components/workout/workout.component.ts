@@ -1,7 +1,7 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { interval, Subscription, take, takeWhile } from 'rxjs';
+import { interval, Subscription, takeWhile } from 'rxjs';
 import { EXERCISE_TYPES } from 'src/app/shared/consts';
 import { WorkoutI } from 'src/app/shared/interfaces';
 import { DataService } from 'src/app/shared/services/data.service';
@@ -55,9 +55,19 @@ export class WorkoutComponent implements OnInit, OnDestroy {
 
   private getWorkoutDetails(id: string): void {
     this.dataService.getWorkoutById(id).subscribe((res) => {
+      res.exerciseGroup.forEach(group => {
+        group.exercises.forEach(exercise => {
+          exercise.sets.forEach(set => {
+            set.weight = null;
+          }) 
+        })
+       
+      })
       this.workoutPlan = res;
       this.titleService.setTitle(
-        this.workoutPlan?.name ? this.workoutPlan.name : 'Workout not found'
+        this.workoutPlan?.name
+         ? this.workoutPlan.name 
+         : 'Workout not found'
       );
     });
   }
@@ -139,8 +149,9 @@ export class WorkoutComponent implements OnInit, OnDestroy {
           this.currentSetIndex++;
         } else {
           this.workoutPlan.completed = true;
-          this.localStorageService.set('workOutPlan', this.workoutPlans);
           this.toastr.success('Workout Completed', 'Congratulations');
+
+          this.dataService.redoWorkout({workoutId: this.workoutPlan._id, workout: this.workoutPlan, user: localStorage.getItem('user')}).subscribe();
           this.router.navigate(['/workout-list']);
         }
       } else {

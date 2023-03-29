@@ -17,7 +17,7 @@ export const NAVIGATION_MENU: SideNavI[] = [
         path: '/completed-workout',
         title: 'Completed workouts',
         icon: '',
-        hide: false,
+        hide: true,
     },
     {
         path: '/explore',

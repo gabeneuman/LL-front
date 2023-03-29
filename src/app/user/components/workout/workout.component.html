@@ -10,14 +10,6 @@
           <div class="col-md-6 col-sm-12">
             <div class="workout-name">
               <div class="d-flex align-items-center">
-                <h2>Workout status:</h2>
-                <h3 class="flex-grow-1 text-right" [ngClass]="
-                    workoutPlan?.completed ? 'text-success' : 'text-warning'
-                  ">
-                  &nbsp; <b> {{ workoutPlan?.completed ? "Completed" : "In Progress" }} </b>
-                </h3>
-              </div>
-              <div class="d-flex align-items-center">
                 <h2>Exercise name:</h2>
                 <h3 class="flex-grow-1 text-right">
                   &nbsp; {{ exercise?.name | titlecase }}

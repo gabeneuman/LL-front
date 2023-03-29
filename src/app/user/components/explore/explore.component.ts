@@ -13,6 +13,7 @@ import { DataService } from 'src/app/shared/services/data.service';
 export class ExploreComponent {
   workoutPlans!: WorkoutI[];
   page = 1;
+  searchText: string = '';
   constructor(
     private router: Router,
     private dataService: DataService,
@@ -56,6 +57,12 @@ export class ExploreComponent {
 
   public viewWorkoutDetails(workoutId: string | undefined): void {
     this.router.navigate(['/explore/', workoutId]);
+  }
+
+  public search() {
+    this.dataService.searchWorkoutByName(this.searchText, this.page).subscribe((res:any) => {
+      this.workoutPlans = res.response;
+    });
   }
 
   public next() {

@@ -31,7 +31,7 @@ export class WorkoutListComponent implements OnInit {
           0
         );
       });
-      this.workoutPlans = workoutPlans?.filter((status) => !status.completed);
+      this.workoutPlans = workoutPlans?.filter((status) => status);
     });
   }
 

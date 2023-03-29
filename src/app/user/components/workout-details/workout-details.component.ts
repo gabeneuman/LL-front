@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -7,6 +7,7 @@ import { DataService } from 'src/app/shared/services/data.service';
 import { LoaderSevice } from 'src/app/shared/services/loading.service';
 import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
 import { TitleService } from 'src/app/shared/services/title.service';
+import * as html2pdf from 'html2pdf.js';
 
 @Component({
   selector: 'app-workout-details',
@@ -17,6 +18,8 @@ export class WorkoutDetailsComponent implements OnInit {
   workoutPlans!: WorkoutI[];
   workoutPlan!: WorkoutI | undefined;
   workoutId!: string | null;
+  @ViewChild('workoutDetails', { static: true }) workoutDetails!: ElementRef;
+  isDownloaded = false;
 
   constructor(
     private titleService: TitleService,
@@ -25,8 +28,9 @@ export class WorkoutDetailsComponent implements OnInit {
     private router: Router,
     private loader: LoaderSevice,
     private dialog: MatDialog,
-    private dataService: DataService
-  ) {}
+    private dataService: DataService,
+    private cd: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
     this.loader.showLoading(true);
@@ -34,7 +38,7 @@ export class WorkoutDetailsComponent implements OnInit {
     if (this.workoutId) {
       this.getWorkoutDetails(this.workoutId);
     }
-   
+
   }
 
   public editWorkout(): void {
@@ -61,6 +65,20 @@ export class WorkoutDetailsComponent implements OnInit {
       this.titleService.setTitle(
         this.workoutPlan?.name ? this.workoutPlan.name : 'Workout not found'
       );
+    });
+  }
+
+  public generatePDF(): void {
+    this.isDownloaded = true;
+    const options = {
+      filename: this.workoutPlan.name + '.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 3 },
+      jsPDF: { unit: 'in', orientation: 'landscape' }
+    };
+    html2pdf().set(options).from(this.workoutDetails.nativeElement).save().then(() => {
+      this.isDownloaded = false;
+      this.cd.detectChanges();
     });
   }
 

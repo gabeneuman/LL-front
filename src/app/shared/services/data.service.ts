@@ -79,4 +79,17 @@ export class DataService {
     );
   }
 
+  redoWorkout(body: {_id? :string, workoutId: string, user: string, workout:any}): Observable<any> {
+    return this.http.post<any>(
+      `${environments.baseURL}${environments.workoutAPI}/redo`,
+        body
+    );
+  }
+
+  searchWorkoutByName(payload, page): Observable<WorkoutI[]> {
+    return this.http.get<WorkoutI[]>(
+      `${environments.baseURL}${environments.workoutAPI}/explore/search?search=${payload}&page=${page}`
+    );
+  }
+
 }

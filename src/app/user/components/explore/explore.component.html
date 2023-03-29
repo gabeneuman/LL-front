@@ -23,6 +23,16 @@
    -->
 <div class="d-flex flex-column justify-content-between min-vh-custom-card">
   <div class="row">
+    <div class="col-12">
+      <!-- Search Bar -->
+      <div class="d-flex justify-content-start">
+        <mat-form-field class="w-50" appearance="outline">
+          <mat-label>Search for a workout</mat-label>
+          <input matInput type="text" placeholder="Search for a workout" name="search" [(ngModel)]="searchText" />
+        </mat-form-field>
+        <button mat-raised-button color="warn" class="ms-3" (click)="search()">Search</button>
+    </div>
+    </div>
     <div class="col-lg-4 col-sm-6" *ngFor="let workout of workoutPlans">
       <div class="card custom-card" style="border-left: 5px solid teal">
         <div class="card-body">
