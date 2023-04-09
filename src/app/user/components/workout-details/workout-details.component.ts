@@ -20,7 +20,8 @@ export class WorkoutDetailsComponent implements OnInit {
   workoutId!: string | null;
   @ViewChild('workoutDetails', { static: true }) workoutDetails!: ElementRef;
   isDownloaded = false;
-
+  history: any = [];
+  maxWeightLifted = 0;
   constructor(
     private titleService: TitleService,
     private route: ActivatedRoute,
@@ -60,11 +61,24 @@ export class WorkoutDetailsComponent implements OnInit {
   }
 
   private getWorkoutDetails(id: string): void {
-    this.dataService.getWorkoutById(id).subscribe((res) => {
-      this.workoutPlan = res;
+    this.dataService.getCompletedWorkoutDetails(id).subscribe((res: any) => {
+      this.history = !res._id && res;
+      res?._id ? this.workoutPlan = res : this.workoutPlan = res[res.length - 1].workout;
       this.titleService.setTitle(
         this.workoutPlan?.name ? this.workoutPlan.name : 'Workout not found'
       );
+      this.maxWeightLifted = this.workoutPlan?.exerciseGroup.reduce((acc, group) => {
+        console.log('acc: ', acc);
+        group.exercises.forEach((exercise) => {
+          exercise.sets.forEach((set) => {
+            if (set.weight > acc) {
+              acc = set.weight;
+            }
+          });
+        });
+        return acc;
+      }
+        , 0);
     });
   }
 

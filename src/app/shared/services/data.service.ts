@@ -92,4 +92,10 @@ export class DataService {
     );
   }
 
+  getCompletedWorkoutDetails(id: string): Observable<WorkoutI> {
+    return this.http.get<WorkoutI>(
+      `${environments.baseURL}${environments.workoutAPI}/completed/${id}`
+    );
+  }
+
 }

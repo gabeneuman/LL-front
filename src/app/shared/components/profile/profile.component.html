@@ -130,17 +130,20 @@
         <mat-tab-group>
           <mat-tab label="Stats">
             <div class="m-3">
-              <h3 class="mb-0 card-title d-flex align-items-center">Completed workouts: <h3
+              
+            </div>
+            <div class="m-3 d-flex justify-content-between">
+
+
+              <div>
+                <h3 class="mb-0 card-title d-flex align-items-center">Completed workouts: <h3
                   class="text-muted card-title mb-0 mx-4">{{stats.completed}}</h3>
               </h3>
               <h3 class="mb-0 card-title d-flex align-items-center">Pending workouts: <h3
                   class="text-muted card-title mb-0 mx-4">{{stats.todo}}</h3>
               </h3>
-            </div>
-            <div class="m-3">
 
-
-              <h2>Last 30 days</h2>
+                <h2>Last 30 days</h2>
               <h3 class="mb-0">
                 Statistical Data
               </h3>
@@ -150,6 +153,26 @@
                     [legend]="pieChartLegend">
                   </canvas></div>
               </div>
+              </div>
+              <div>
+                <h3 class="mb-0 card-title d-flex align-items-center">Completed workouts: <h3
+                  class="text-muted card-title mb-0 mx-4">{{weeklyStats.completed}}</h3>
+              </h3>
+              <h3 class="mb-0 card-title d-flex align-items-center">Pending workouts: <h3
+                  class="text-muted card-title mb-0 mx-4">{{weeklyStats.todo}}</h3>
+              </h3>
+              <h2>Last 7 days</h2>
+              <h3 class="mb-0">
+                Statistical Data
+              </h3>
+              <div class="row">
+                <div class="col-md-6"> <canvas baseChart [type]="'pie'" [datasets]="pieChartDatasetsWeekly"
+                    [labels]="pieChartLabels" [options]="pieChartOptions" [plugins]="pieChartPlugins"
+                    [legend]="pieChartLegend">
+                  </canvas></div>
+              </div>
+            </div>
+
             </div>
           </mat-tab>
           <mat-tab label="Workouts">

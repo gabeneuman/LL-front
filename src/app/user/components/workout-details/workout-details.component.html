@@ -1,8 +1,9 @@
-<div class="d-flex justify-content-lg-end flex-wrap justify-content-sm-between mb-3" >
+<div class="d-flex justify-content-lg-end flex-wrap justify-content-sm-between mb-3">
   <button mat-raised-button class="start-workout-btn me-2" color="warn" (click)="generatePDF()">
     Download workout <mat-icon>download</mat-icon>
   </button>
-  <button mat-raised-button class="start-workout-btn me-2 text-danger" (click)="startWorkout()">{{workoutPlan?.completed ? 'Restart workout' : 'Start workout'}}
+  <button mat-raised-button class="start-workout-btn me-2 text-danger" (click)="startWorkout()">{{workoutPlan?.completed
+    ? 'Restart workout' : 'Start workout'}}
     <mat-icon>fitness_center</mat-icon></button>
   <button mat-raised-button class="edit-workout-btn" (click)="editWorkout()">Edit workout
     <mat-icon>edit</mat-icon></button>
@@ -34,7 +35,9 @@
             <li *ngFor="let details of exercise.sets; let setId=index">
               <span *ngIf="details?.reps"> <b>Set {{setId + 1}}:</b>
 
-                {{details.reps}} reps 
+                {{details.reps}} reps
+
+                <span class="text-muted fs-6" *ngIf="details.weight"> &nbsp;&nbsp; (You have lifted <b>{{details.weight}} lb</b> for this set.) </span>
                 <!-- <span *ngIf="details.weight">
                   &nbsp;&nbsp; ->
                   &nbsp;&nbsp; <b>Weight:</b> {{details.weight}} lb
@@ -49,5 +52,15 @@
         </h3>
       </div>
     </div>
+
+    <div class="card custom-card" *ngIf="history.length">
+      <div class="card-body">
+        <p> You have completed this workout on {{ workoutPlan.updatedAt | date: 'short' | lowercase }} <span
+            class="text-muted">(latest).</span></p>
+        <p> You have lifted maximum weight {{maxWeightLifted}} lb in this workout. </p>
+        <p class="mb-0"> You have done this workout <span class="text-primary">{{history.length}} times.</span> </p>
+      </div>
+    </div>
+
   </div>
 </div>

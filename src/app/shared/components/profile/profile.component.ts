@@ -26,8 +26,10 @@ export class ProfileComponent {
   };
   public pieChartLabels = [['Completed'], ['In progress']];
   public pieChartDatasets = [];
+  public pieChartDatasetsWeekly = [];
   public pieChartLegend = true;
   public pieChartPlugins = [];
+  public weeklyStats: any = {};
 
   constructor(
     private dataService: DataService,
@@ -54,6 +56,19 @@ export class ProfileComponent {
         this.stats = data.stat;
         this.pieChartDatasets = [{
           data: [this.stats.completed, this.stats.todo]
+        }];
+        const inLastWeek = this.workouts.filter((item) => {
+          const date = new Date(item.createdAt);
+          const today = new Date();
+          const diff = today.getTime() - date.getTime();
+          const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
+          return diffDays <= 7;
+        });
+        const completed = inLastWeek.filter((item) => item.completed).length;
+        const todo = inLastWeek.filter((item) => !item.completed).length;
+        this.weeklyStats = { completed, todo };
+        this.pieChartDatasetsWeekly = [{
+          data: [completed, todo]
         }];
       });
     }
